@@ -7,58 +7,89 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  serverTimestamp,
+  writeBatch,
+  type DocumentData,
+ 
 } from "firebase/firestore";
+
 import { db } from "../lib/firebase";
 import type { Task } from "../types/task";
 
 const tasksCollection = collection(db, "tasks");
 
-// 🔹 Obtener tareas por usuario
-export const getTasks = async (userId: string): Promise<Task[]> => {
+
+// 🔥 CREATE TASK
+export const createTask = async (
+  task: Omit<Task, "id" | "createdAt">
+) => {
+  if (!task.userId) {
+    throw new Error("userId es obligatorio para crear una tarea");
+  }
+
+  const payload = {
+    title: task.title,
+    description: task.description ?? "",
+    dueDate: task.dueDate ?? "",
+    userId: task.userId,
+    completed: task.completed ?? false,
+    createdAt: Date.now(),
+    index: task.index ?? 0,
+  };
+
+  return await addDoc(tasksCollection, payload);
+};
+
+
+// 🔥 GET TASKS BY USER
+export const getTasksByUser = async (userId: string): Promise<Task[]> => {
   const q = query(tasksCollection, where("userId", "==", userId));
+
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((docSnap) => {
-    const data = docSnap.data();
+    const data = docSnap.data() as DocumentData
 
     return {
       id: docSnap.id,
       title: data.title ?? "",
       description: data.description ?? "",
+      dueDate: data.dueDate ?? "",
+      userId: data.userId ?? "",
       completed: data.completed ?? false,
-      createdAt: data.createdAt,
-      userId: data.userId,
-    } as Task;
+      createdAt: data.createdAt ?? 0,
+      index: data.index ?? 0,
+    };
   });
 };
 
-// 🔹 Crear tarea
-export const createTask = async (
-  task: Pick<Task, "title" | "description" | "userId">
-) => {
-  const docRef = await addDoc(tasksCollection, {
-    title: task.title,
-    description: task.description ?? "",
-    completed: false,
-    userId: task.userId,
-    createdAt: serverTimestamp(),
-  });
 
-  return docRef.id;
-};
-
-// 🔹 Actualizar tarea (más seguro)
+// 🔥 UPDATE TASK
 export const updateTask = async (
-  id: string,
-  updates: Partial<Pick<Task, "title" | "description" | "completed">>
+  taskId: string,
+  data: Partial<Task>
 ) => {
-  const taskRef = doc(db, "tasks", id);
-  await updateDoc(taskRef, updates);
+  const taskRef = doc(db, "tasks", taskId);
+  return await updateDoc(taskRef, data);
 };
 
-// 🔹 Eliminar tarea
-export const deleteTask = async (id: string) => {
-  const taskRef = doc(db, "tasks", id);
-  await deleteDoc(taskRef);
+
+// 🔥 REORDER TASKS (drag & drop ready)
+export const updateTasksOrder = async (sortedTasks: Task[]) => {
+  const batch = writeBatch(db);
+
+  sortedTasks.forEach((task, idx) => {
+    const taskRef = doc(db, "tasks", task.id);
+    batch.update(taskRef, {
+      index: idx,
+    });
+  });
+
+  return await batch.commit();
+};
+
+
+// 🔥 DELETE TASK
+export const deleteTask = async (taskId: string) => {
+  const taskRef = doc(db, "tasks", taskId);
+  return await deleteDoc(taskRef);
 };

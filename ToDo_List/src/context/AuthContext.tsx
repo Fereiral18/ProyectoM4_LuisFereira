@@ -4,7 +4,7 @@ import { auth } from "../lib/firebase";
 
 
 interface AuthContextType {
-  user: User | null;
+ user: User | null;
   loading: boolean;
 }
 

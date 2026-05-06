@@ -1,66 +1,60 @@
-import { useState } from "react";
-import { createTask } from "../../services/tasks.service";
-import { useAuth } from "../../context/AuthContext";
+import React, { useState } from "react";
+import "./style.css"
 
-interface Props {
-  onTaskCreated?: () => void;
+interface TaskFormProps {
+  onAdd: (title: string, description: string, dueDate: string) => void;
 }
 
-const TaskForm = ({ onTaskCreated }: Props) => {
-  const { user } = useAuth();
-
+export const TaskForm = ({ onAdd }: TaskFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [dueDate, setDueDate] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!user) return;
-    if (!title.trim()) return;
-
-    try {
-      setLoading(true);
-
-      await createTask({
-        title,
-        description,
-        userId: user.uid,
-      });
-
-      setTitle("");
-      setDescription("");
-
-      onTaskCreated?.(); // refrescar lista si quieres
-    } catch (error) {
-      console.error("Error creando tarea:", error);
-    } finally {
-      setLoading(false);
+    if (!title.trim()) {
+      setError("El título es obligatorio");
+      return;
     }
+
+    setError("");
+    onAdd(title, description, dueDate);
+
+    setTitle("");
+    setDescription("");
+    setDueDate("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="task-form">
-      <h2>Nueva tarea</h2>
+   <form className="task-form" onSubmit={handleSubmit}>
+  <h3>Nueva tarea</h3>
 
-      <input
-        type="text"
-        placeholder="Título"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+  <input
+    type="text"
+    placeholder="Título de la tarea"
+    value={title}
+    onChange={(e) => setTitle(e.target.value)}
+    required
+  />
 
-      <textarea
-        placeholder="Descripción (opcional)"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+  <textarea
+    placeholder="Descripción (opcional)"
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+  />
 
-      <button type="submit" disabled={loading}>
-        {loading ? "Creando..." : "Crear tarea"}
-      </button>
-    </form>
+  <input
+    type="date"
+    value={dueDate}
+    onChange={(e) => setDueDate(e.target.value)}
+    required
+  />
+
+  {error && <p className="error">{error}</p>}
+
+  <button type="submit">Agregar tarea</button>
+</form>
   );
 };
-
-export default TaskForm;

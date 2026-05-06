@@ -1,26 +1,30 @@
 import type { Task } from "../../types/task";
 
-
 interface Props {
   task: Task;
-  onToggle: (id: string) => void;
+  onToggle: (id: string, completed: boolean) => void;
   onDelete: (id: string) => void;
 }
 
 const TaskItem = ({ task, onToggle, onDelete }: Props) => {
+ 
   return (
-    <div className="task">
-      <h3>{task.title}</h3>
-      <p>{task.description}</p>
+<div className={`task-item ${task.completed ? "done" : ""}`}>
+  <div className="task-content">
+    <h3>{task.title}</h3>
+    <p>{task.description}</p>
 
-      <button onClick={() => onToggle(task.id)}>
-        {task.completed ? "✔" : "❌"}
-      </button>
+    <small>📅 {task.dueDate || "Sin fecha"}</small>
+  </div>
 
-      <button onClick={() => onDelete(task.id)}>
-        Eliminar
-      </button>
-    </div>
+  <div className="task-actions">
+    <button onClick={() => onToggle(task.id, task.completed)}>
+      {task.completed ? "✔" : "○"}
+    </button>
+
+    <button onClick={() => onDelete(task.id)}>🗑</button>
+  </div>
+</div>
   );
 };
 

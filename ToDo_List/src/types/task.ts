@@ -1,11 +1,13 @@
-export interface Task {
- id: string;
+export type Task = {
+  id: string;
   title: string;
-  description?: string;
+  description: string;
+  dueDate: string;
   completed: boolean;
-  createdAt: any;
   userId: string;
-}
+  createdAt: number;
+  index?:number;
+};
 export type TaskFilter = "all" | "completed" | "pending";
 
 
