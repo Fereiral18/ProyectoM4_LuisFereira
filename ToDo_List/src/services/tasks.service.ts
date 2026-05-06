@@ -7,50 +7,58 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  Timestamp,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import type { Task } from "../types/task";
 
-
-// 📌 Referencia a la colección
 const tasksCollection = collection(db, "tasks");
 
 // 🔹 Obtener tareas por usuario
 export const getTasks = async (userId: string): Promise<Task[]> => {
   const q = query(tasksCollection, where("userId", "==", userId));
-  const querySnapshot = await getDocs(q);
+  const snapshot = await getDocs(q);
 
-  const tasks: Task[] = querySnapshot.docs.map((docSnap) => ({
-    id: docSnap.id,
-    ...docSnap.data(),
-  })) as Task[];
+  return snapshot.docs.map((docSnap) => {
+    const data = docSnap.data();
 
-  return tasks;
+    return {
+      id: docSnap.id,
+      title: data.title ?? "",
+      description: data.description ?? "",
+      completed: data.completed ?? false,
+      createdAt: data.createdAt,
+      userId: data.userId,
+    } as Task;
+  });
 };
 
 // 🔹 Crear tarea
-export const createTask = async (task: Partial<Task>) => {
+export const createTask = async (
+  task: Pick<Task, "title" | "description" | "userId">
+) => {
   const docRef = await addDoc(tasksCollection, {
-    ...task,
+    title: task.title,
+    description: task.description ?? "",
     completed: false,
-    createdAt: Timestamp.now(),
+    userId: task.userId,
+    createdAt: serverTimestamp(),
   });
 
   return docRef.id;
 };
 
-// 🔹 Actualizar tarea
+// 🔹 Actualizar tarea (más seguro)
 export const updateTask = async (
   id: string,
-  updates: Partial<Task>
+  updates: Partial<Pick<Task, "title" | "description" | "completed">>
 ) => {
-  const taskDoc = doc(db, "tasks", id);
-  await updateDoc(taskDoc, updates);
+  const taskRef = doc(db, "tasks", id);
+  await updateDoc(taskRef, updates);
 };
 
 // 🔹 Eliminar tarea
 export const deleteTask = async (id: string) => {
-  const taskDoc = doc(db, "tasks", id);
-  await deleteDoc(taskDoc);
+  const taskRef = doc(db, "tasks", id);
+  await deleteDoc(taskRef);
 };

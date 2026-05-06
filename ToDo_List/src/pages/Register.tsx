@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { register } from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import "./style.css";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -19,11 +20,29 @@ const Register = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" onChange={(e) => setPassword(e.target.value)} />
-      <button type="submit">Registrarse</button>
-    </form>
+    <div className="auth-container">
+      
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h2>Crea tu cuenta</h2>
+        <p>Empieza a organizar tus tareas</p>
+
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button type="submit">Registrarse</button>
+      </form>
+    </div>
   );
 };
 

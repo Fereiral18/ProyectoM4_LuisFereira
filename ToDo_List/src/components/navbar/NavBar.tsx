@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/themeContext";
 import { logout } from "../../services/auth.service";
-
+import "./style.css";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -16,30 +16,33 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      {/* Logo / Home */}
-      <Link to="/dashboard" className="logo">
-        📝 TodoApp
+      {/* Logo */}
+      <Link to="/" className="logo">
+       MetaCodeApp
       </Link>
 
       <div className="nav-actions">
         {/* Theme toggle */}
-        <button onClick={toggleTheme}>
+        <button className="theme-btn" onClick={toggleTheme}>
           {theme === "light" ? "🌙" : "☀️"}
         </button>
 
-        {/* Links según auth */}
         {user ? (
           <>
             <span className="user-email">{user.email}</span>
 
-            <button onClick={handleLogout}>
+            <button className="logout-btn" onClick={handleLogout}>
               Cerrar sesión
             </button>
           </>
         ) : (
           <>
-            <Link to="/">Login</Link>
-            <Link to="/register">Registro</Link>
+            <Link to="/login" className="nav-link">
+              Login
+            </Link>
+            <Link to="/register" className="nav-link register">
+              Registro
+            </Link>
           </>
         )}
       </div>

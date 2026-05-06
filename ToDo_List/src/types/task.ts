@@ -1,9 +1,9 @@
 export interface Task {
-  id: string;
+ id: string;
   title: string;
   description?: string;
   completed: boolean;
-  createdAt: string;
+  createdAt: any;
   userId: string;
 }
 export type TaskFilter = "all" | "completed" | "pending";

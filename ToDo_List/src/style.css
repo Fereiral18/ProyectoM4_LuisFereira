@@ -1,0 +1,50 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Asegura altura completa */
+html,
+body,
+#root {
+  height: 100%;
+  font-family: system-ui, sans-serif;
+}
+
+/* Contenedor principal */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenido debajo del navbar */
+.app-content {
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Opcional: limitar ancho tipo app moderna */
+.app-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+:root {
+  --bg-color: #ffffff;
+  --text-color: #0f172a;
+  --card-bg: #f1f5f9;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0f172a;
+  --text-color: #f8fafc;
+  --card-bg: #1e293b;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

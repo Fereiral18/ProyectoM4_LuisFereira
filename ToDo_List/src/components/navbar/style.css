@@ -1,0 +1,94 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+background-color: #1E22AA;
+  color: white;
+
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* LOGO */
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s;
+}
+
+.logo:hover {
+  color: #facc15;
+}
+
+/* ACTIONS */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* LINKS */
+.nav-link {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-link:hover {
+  color: #facc15;
+}
+
+/* REGISTER DESTACADO */
+.register {
+  background: #facc15;
+  color: black;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.register:hover {
+  background: #fde047;
+}
+
+/* EMAIL */
+.user-email {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* BUTTONS */
+.theme-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  transition: 0.3s;
+}
+
+.theme-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.logout-btn {
+  background: #ef4444;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}

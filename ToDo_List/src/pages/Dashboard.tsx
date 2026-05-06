@@ -3,6 +3,7 @@ import type { Task, TaskFilter } from "../types/task";
 
 import { useAuth } from "../context/AuthContext";
 import TaskList from "../components/tasks/TaskList";
+import TaskForm from "../components/tasks/TaskForm";
 import { getTasks } from "../services/tasks.service";
 
 const Dashboard = () => {
@@ -12,7 +13,7 @@ const Dashboard = () => {
   const [filter, setFilter] = useState<TaskFilter>("all");
   const [isLoadingTasks, setIsLoadingTasks] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+console.log(tasks)
   // 🔹 Persistencia del filtro
   useEffect(() => {
     const savedFilter = localStorage.getItem("filter") as TaskFilter;
@@ -23,13 +24,14 @@ const Dashboard = () => {
     localStorage.setItem("filter", filter);
   }, [filter]);
 
-  // 🔹 Fetch de tareas con usuario real
+  // 🔹 Cargar tareas
   useEffect(() => {
     if (!user) return;
 
     const fetchTasks = async () => {
       try {
         setIsLoadingTasks(true);
+
         const data = await getTasks(user.uid);
         setTasks(data);
       } catch (err) {
@@ -43,7 +45,7 @@ const Dashboard = () => {
     fetchTasks();
   }, [user]);
 
-  // 🔹 Filtro
+  // 🔹 Filtro de tareas
   const filteredTasks = tasks.filter((task) => {
     if (filter === "completed") return task.completed;
     if (filter === "pending") return !task.completed;
@@ -52,14 +54,25 @@ const Dashboard = () => {
 
   // 🔹 Estados globales
   if (loading) return <p>Cargando usuario...</p>;
-
   if (!user) return <p>No autorizado</p>;
 
   return (
     <div className="container">
       <h1>Mis tareas</h1>
 
-      {/* Filtros */}
+      {/* 🧾 FORMULARIO (ANTES FALTABA) */}
+      <TaskForm
+        onTaskCreated={async () => {
+          try {
+            const data = await getTasks(user.uid);
+            setTasks(data);
+          } catch (err) {
+            console.error(err);
+          }
+        }}
+      />
+
+      {/* 🔘 FILTROS */}
       <div className="filters">
         <button
           className={filter === "all" ? "active" : ""}
@@ -83,11 +96,11 @@ const Dashboard = () => {
         </button>
       </div>
 
-      {/* Estados de carga/error */}
+      {/* ⏳ ESTADOS */}
       {isLoadingTasks && <p>Cargando tareas...</p>}
-      {error && <p>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Lista */}
+      {/* 📋 LISTA */}
       {!isLoadingTasks && !error && (
         <TaskList tasks={filteredTasks} />
       )}
