@@ -8,15 +8,14 @@ import {
   deleteDoc,
   doc,
   writeBatch,
+  orderBy,
   type DocumentData,
- 
 } from "firebase/firestore";
 
 import { db } from "../lib/firebase";
 import type { Task } from "../types/task";
 
 const tasksCollection = collection(db, "tasks");
-
 
 // 🔥 CREATE TASK
 export const createTask = async (
@@ -39,15 +38,18 @@ export const createTask = async (
   return await addDoc(tasksCollection, payload);
 };
 
-
-// 🔥 GET TASKS BY USER
+// 🔥 GET TASKS BY USER (opcional si usas onSnapshot)
 export const getTasksByUser = async (userId: string): Promise<Task[]> => {
-  const q = query(tasksCollection, where("userId", "==", userId));
-
+  const q = query(
+    tasksCollection,
+    where("userId", "==", userId),
+    orderBy("index", "asc")
+  );
+ 
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((docSnap) => {
-    const data = docSnap.data() as DocumentData
+    const data = docSnap.data() as DocumentData;
 
     return {
       id: docSnap.id,
@@ -62,7 +64,6 @@ export const getTasksByUser = async (userId: string): Promise<Task[]> => {
   });
 };
 
-
 // 🔥 UPDATE TASK
 export const updateTask = async (
   taskId: string,
@@ -72,21 +73,17 @@ export const updateTask = async (
   return await updateDoc(taskRef, data);
 };
 
-
-// 🔥 REORDER TASKS (drag & drop ready)
+// 🔥 REORDER TASKS
 export const updateTasksOrder = async (sortedTasks: Task[]) => {
   const batch = writeBatch(db);
 
   sortedTasks.forEach((task, idx) => {
     const taskRef = doc(db, "tasks", task.id);
-    batch.update(taskRef, {
-      index: idx,
-    });
+    batch.update(taskRef, { index: idx });
   });
 
   return await batch.commit();
 };
-
 
 // 🔥 DELETE TASK
 export const deleteTask = async (taskId: string) => {

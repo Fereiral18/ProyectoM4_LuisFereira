@@ -4,7 +4,8 @@ import {
   query,
   where,
   onSnapshot,
-  type DocumentData,
+  orderBy,
+
 } from "firebase/firestore";
 
 import { useAuth } from "../context/AuthContext";
@@ -17,71 +18,58 @@ import {
 } from "../services/tasks.service";
 
 export const useTasks = () => {
- 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
 
-useEffect(() => {
-  if (authLoading) return;
+  useEffect(() => {
+    if (!user?.uid) {
+      setTasks([]);
+      setLoading(false);
+      return;
+    }
 
-if (!user?.uid) {
-  setTasks([]);
-  setLoading(false);
-  return;
-}
+    setLoading(true);
+    setError(null);
 
-  setLoading(true);
-  setError(null);
+    const q = query(
+      collection(db, "tasks"),
+      where("userId", "==", user.uid),
+      orderBy("index", "asc")
+    );
 
-  const q = query(
-    collection(db, "tasks"),
-    where("userId", "==", user.uid)
-  );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Task[];
 
-  const unsubscribe = onSnapshot(
-    q,
-    (snapshot) => {
-      const data: Task[] = snapshot.docs.map((doc) => {
-        const raw = doc.data() as DocumentData;
-
-        return {
-          id: doc.id,
-          title: raw.title ?? "",
-          description: raw.description ?? "",
-          dueDate: raw.dueDate ?? "",
-          completed: raw.completed ?? false,
-          userId: raw.userId ?? "",
-          createdAt: raw.createdAt ?? 0,
-          index: raw.index ?? 0,
-        };
-      });
-
-      setTasks(data);
+      // 3. Ordenamos por el campo index (importante para mantener tu orden manual)
+      const sortedData = data.sort((a, b) => (a.index || 0) - (b.index || 0));
+      
+      setTasks(sortedData);
       setLoading(false);
     },
-    (err) => {
-      console.error(err);
-      setError("Error al conectar con Firebase");
-      setLoading(false);
-    }
-  );
+      (err) => {
+        console.error(err);
+        setError("Error al conectar con Firebase");
+        setLoading(false);
+      }
+    );
 
-  // 🔥 SIEMPRE devolver cleanup
-  return () => unsubscribe();
-}, [user?.uid, authLoading]);
-  // 🔥 CLAVE
+    return () => unsubscribe();
+  }, [user?.uid]);
+
   // 🔥 CREATE
   const addTask = async (
     title: string,
     description: string,
     dueDate: string
   ) => {
-    if (!user) return;
-
-    setError(null);
+    if (!user?.uid) return;
+console.log("CREANDO TASK con user:", user.uid); // 👈 AQUÍ
 
     try {
       await createTask({
@@ -91,23 +79,30 @@ if (!user?.uid) {
         userId: user.uid,
         completed: false,
       });
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError("No se pudo crear la tarea");
     }
   };
 
-  // 🔥 TOGGLE (simplificado)
-const toggleTaskStatus = async (id: string, completed: boolean) => {
-  await updateTask(id, {
-    completed: !completed,
-  });
-};
+  // 🔥 TOGGLE
+  const toggleTaskStatus = async (id: string, completed: boolean) => {
+    try {
+      await updateTask(id, {
+        completed: !completed,
+      });
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo actualizar la tarea");
+    }
+  };
 
   // 🔥 DELETE
   const removeTask = async (taskId: string) => {
     try {
       await deleteTask(taskId);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError("No se pudo eliminar la tarea");
     }
   };

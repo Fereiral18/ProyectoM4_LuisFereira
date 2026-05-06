@@ -2,9 +2,8 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../lib/firebase";
 
-
 interface AuthContextType {
- user: User | null;
+  user: User | null;
   loading: boolean;
 }
 
@@ -20,7 +19,7 @@ export const AuthProvider = ({ children }: any) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
-      setLoading(false);
+      setLoading(false); // OK aquí, pero solo después del primer evento REAL
     });
 
     return () => unsubscribe();
