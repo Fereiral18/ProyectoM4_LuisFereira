@@ -55,6 +55,7 @@ const Login = () => {
         <button type="submit" className="login-btn">
           Ingresar
         </button>
+      </form>
         <button className="google-btn" onClick={handleGoogleLogin}>
           <img
             src="https://developers.google.com/identity/images/g-logo.png"
@@ -62,7 +63,6 @@ const Login = () => {
           />
           Iniciar sesión con Google
         </button>
-      </form>
     </div>
   );
 };
