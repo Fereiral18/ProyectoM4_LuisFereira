@@ -9,13 +9,13 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-const handleGoogleLogin = async () => {
-  try {
-    await signInWithRedirect(auth, googleProvider);
-  } catch (error) {
-    console.error("Error login Google:", error);
-  }
-};
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithRedirect(auth, googleProvider);
+    } catch (error) {
+      console.error("Error login Google:", error);
+    }
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -30,7 +30,6 @@ const handleGoogleLogin = async () => {
 
   return (
     <div className="login-container">
-    
       <form className="login-card" onSubmit={handleSubmit}>
         <h2>Bienvenido</h2>
         <p>Inicia sesión para continuar</p>
@@ -56,13 +55,13 @@ const handleGoogleLogin = async () => {
         <button type="submit" className="login-btn">
           Ingresar
         </button>
-     <button className="google-btn" onClick={handleGoogleLogin}>
-  <img
-    src="https://developers.google.com/identity/images/g-logo.png"
-    alt="Google"
-  />
-  Iniciar sesión con Google
-</button>
+        <button className="google-btn" onClick={handleGoogleLogin}>
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google"
+          />
+          Iniciar sesión con Google
+        </button>
       </form>
     </div>
   );
