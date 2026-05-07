@@ -1,13 +1,21 @@
 import { useState } from "react";
 import { login } from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../lib/firebase";
 import "./style.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+const handleGoogleLogin = async () => {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch (error) {
+    console.error("Error login Google:", error);
+  }
+};
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -47,6 +55,9 @@ const Login = () => {
         <button type="submit" className="login-btn">
           Ingresar
         </button>
+        <button onClick={handleGoogleLogin}>
+  Iniciar sesión con Google
+</button>
       </form>
     </div>
   );

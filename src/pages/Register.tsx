@@ -10,14 +10,18 @@ const Register = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    
     try {
       await register(email, password);
       navigate("/dashboard");
-    } catch (error) {
+    }
+     catch (error) {
       console.error(error);
       alert("Error al registrarse");
     }
+    
   };
+  
 
   return (
     <div className="auth-container">
