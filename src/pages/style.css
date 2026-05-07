@@ -329,6 +329,8 @@ background-color: #9c9b9b;
 
 /*----------btn de google ----------------------------*/
 .google-btn {
+
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
