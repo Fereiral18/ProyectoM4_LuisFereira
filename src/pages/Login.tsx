@@ -9,6 +9,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  console.log("EMAIL LOGIN:", email);
+console.log("PASSWORD LOGIN:", password);
   const handleGoogleLogin = async () => {
     try {
       await signInWithRedirect(auth, googleProvider);

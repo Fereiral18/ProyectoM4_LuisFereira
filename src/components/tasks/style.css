@@ -14,7 +14,9 @@
   margin: 0;
   font-size: 18px;
 }
-
+h3{
+ color: black;
+}
 .task-form input,
 .task-form textarea {
   padding: 10px;

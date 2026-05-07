@@ -67,11 +67,28 @@ if (!user?.uid) return;
 
       <TaskForm onAdd={addTask} />
 
-      <div>
-        <button onClick={() => setFilter("all")}>Todas</button>
-        <button onClick={() => setFilter("completed")}>Completadas</button>
-        <button onClick={() => setFilter("pending")}>Pendientes</button>
-      </div>
+      <div className="filter-container">
+  <button
+    className={`filter-btn ${filter === "all" ? "active" : ""}`}
+    onClick={() => setFilter("all")}
+  >
+    Todas
+  </button>
+
+  <button
+    className={`filter-btn ${filter === "completed" ? "active" : ""}`}
+    onClick={() => setFilter("completed")}
+  >
+    Completadas
+  </button>
+
+  <button
+    className={`filter-btn ${filter === "pending" ? "active" : ""}`}
+    onClick={() => setFilter("pending")}
+  >
+    Pendientes
+  </button>
+</div>
 
       {loadingTasks && <p>Cargando...</p>}
       {error && <p>{error}</p>}
@@ -81,12 +98,13 @@ if (!user?.uid) return;
         onToggle={(id, completed) => toggleTaskStatus(id, completed)}
         onDelete={removeTask}
       />
-    <button
-            onClick={handleSendEmail}
-            disabled={sendingEmail}
-            >
-            {sendingEmail ? "Enviando..." : "📧 Enviar Resumen por Email"}
-          </button>
+   <button
+  className={`email-btn ${sendingEmail ? "loading" : ""}`}
+  onClick={handleSendEmail}
+  disabled={sendingEmail}
+>
+  {sendingEmail ? "Enviando..." : "📧 Enviar Resumen por Email"}
+</button>
             </div>
   );
 };
