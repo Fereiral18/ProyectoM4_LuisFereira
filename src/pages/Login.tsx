@@ -56,7 +56,11 @@ const handleGoogleLogin = async () => {
         <button type="submit" className="login-btn">
           Ingresar
         </button>
-        <button onClick={handleGoogleLogin}>
+     <button className="google-btn" onClick={handleGoogleLogin}>
+  <img
+    src="https://developers.google.com/identity/images/g-logo.png"
+    alt="Google"
+  />
   Iniciar sesión con Google
 </button>
       </form>
