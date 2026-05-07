@@ -13,7 +13,7 @@ const Register = () => {
     
     try {
       await register(email, password);
-      navigate("/dashboard");
+      navigate("/tasks");
     }
      catch (error) {
       console.error(error);
