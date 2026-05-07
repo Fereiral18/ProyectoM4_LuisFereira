@@ -75,7 +75,7 @@ SES_SENDER_EMAIL=
 🚀 URL de producción
 
 🔗 Aplicación desplegada en Vercel:
-https://tu-proyecto.vercel.app
+https://proyecto-m4-luis-fereira.vercel.app/
 
 📬 Flujo de envío de emails (AWS SES + Vercel Functions)
 
