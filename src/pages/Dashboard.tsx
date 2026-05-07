@@ -67,11 +67,11 @@ if (!user?.uid) return;
 
       <TaskForm onAdd={addTask} />
 
-      <div>
-        <button onClick={() => setFilter("all")}>Todas</button>
-        <button onClick={() => setFilter("completed")}>Completadas</button>
-        <button onClick={() => setFilter("pending")}>Pendientes</button>
-      </div>
+     <div className="filters">
+  <button onClick={() => setFilter("all")}>Todas</button>
+  <button onClick={() => setFilter("completed")}>Completadas</button>
+  <button onClick={() => setFilter("pending")}>Pendientes</button>
+</div>
 
       {loadingTasks && <p>Cargando...</p>}
       {error && <p>{error}</p>}
