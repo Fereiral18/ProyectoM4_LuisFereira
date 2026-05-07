@@ -30,7 +30,9 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <form className="login-card" onSubmit={handleSubmit}>
+      <div className="login-card">
+
+      <form  onSubmit={handleSubmit}>
         <h2>Bienvenido</h2>
         <p>Inicia sesión para continuar</p>
 
@@ -40,7 +42,7 @@ const Login = () => {
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             required
-          />
+            />
         </div>
 
         <div className="input-group">
@@ -49,20 +51,21 @@ const Login = () => {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
             required
-          />
+            />
         </div>
+      </form>
 
         <button type="submit" className="login-btn">
           Ingresar
         </button>
-      </form>
         <button className="google-btn" onClick={handleGoogleLogin}>
           <img
             src="https://developers.google.com/identity/images/g-logo.png"
             alt="Google"
-          />
+            />
           Iniciar sesión con Google
         </button>
+            </div>
     </div>
   );
 };
