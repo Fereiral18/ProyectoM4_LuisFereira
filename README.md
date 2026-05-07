@@ -123,7 +123,8 @@ Tipado estricto en TypeScript.
 Arquitectura orientada a servicios.
 Testing como parte integral del desarrollo.
 
-La IA funcionó como un asistente técnico, no como reemplazo del criterio de diseño, permitiendo acelerar el desarrollo sin comprometer calidad ni comprensión del código.
+La IA funcionó como un asistente técnico, no como reemplazo del criterio de diseño, permitiendo acelerar el desarrollo 
+sin comprometer calidad ni comprensión del código.
 
 🧪 Testing
 
