@@ -150,4 +150,5 @@ Mejora de UX/UI con feedback visual
 Optimización de rendimiento en listas grandes
 📎 Conclusión
 
-Este proyecto integra prácticas modernas de desarrollo Full Stack, priorizando escalabilidad, mantenibilidad y seguridad. La combinación de React, TypeScript, Firebase, Vercel y AWS SES permite construir una solución robusta alineada a un entorno productivo real.
+Este proyecto integra prácticas modernas de desarrollo Full Stack, priorizando escalabilidad, mantenibilidad y seguridad.
+La combinación de React, TypeScript, Firebase, Vercel y AWS SES permite construir una solución robusta alineada a un entorno productivo real.
