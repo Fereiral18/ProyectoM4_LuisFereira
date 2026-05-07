@@ -118,7 +118,7 @@
     position: absolute;
     display: flex;
     justify-content: center;
-    flex-direction: columnlogin-card;
+    flex-direction: column;
   background: var(--card-bg);
   color: var(--text-color);
   padding: 40px 30px;
